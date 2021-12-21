@@ -1,6 +1,5 @@
-import { get } from "./request";
-
+import { get } from './request';
 
 export const sayHello = () => {
-    return get('/hello')
-}
+  return get('/hello');
+};
