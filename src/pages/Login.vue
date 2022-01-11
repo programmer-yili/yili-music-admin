@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
     <q-card class="login-form-content">
-      <div class="title">元力音乐后台</div>
+      <div class="title">猿力音乐后台</div>
       <q-form class="q-gutter-md" @submit="onSubmit(username, password)">
         <q-input
           filled
@@ -51,6 +51,7 @@ export default {
     const route = useRoute();
     const onSubmit = (username, password) => {
       store.dispatch('user/login', { username, password }).then(() => {
+        store.dispatch('user/fetchCurrentUser');
         router.push({ path: route.query.redirect || '/' });
       });
     };
@@ -79,6 +80,7 @@ export default {
       text-align: center;
       margin-bottom: 50px;
     }
+
     width: 400px;
     padding: 20px;
   }
