@@ -3,6 +3,12 @@ import Cookies from 'js-cookie';
 const TokenKey = 'yuanli-token';
 const UserKey = 'current-user';
 
+const defaultUser = {
+  username: null,
+  nickname: null,
+  roles: []
+};
+
 export const getToken = () => {
   return Cookies.get(TokenKey);
 };
@@ -21,7 +27,7 @@ export const setCurrentUser = currentUser => {
 
 export const getCurrentUser = () => {
   const user = Cookies.get(UserKey);
-  return user === undefined ? null : JSON.parse(user);
+  return user === undefined ? defaultUser : JSON.parse(user);
 };
 
 export const removeCurrentUser = () => {
