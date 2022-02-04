@@ -28,6 +28,10 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   response => {
+    if (response.data.code) {
+      handleErrorResponse(response);
+      return Promise.reject(response.data);
+    }
     return response.data;
   },
   error => {
@@ -40,11 +44,22 @@ const handleErrorResponse = response => {
   if (response.status === 401 || response.status === 403) {
     store.dispatch('user/logout').then(() => window.location.reload());
   }
-  Notify.create({
-    type: 'negative',
-    message: response.data.message,
-    position: 'top'
-  });
+
+  if (response.data instanceof Array) {
+    response.data.forEach(item => {
+      Notify.create({
+        type: 'negative',
+        message: item.message,
+        position: 'top'
+      });
+    });
+  } else {
+    Notify.create({
+      type: 'negative',
+      message: response.data.message,
+      position: 'top'
+    });
+  }
 };
 
 const { get, post, put } = instance;

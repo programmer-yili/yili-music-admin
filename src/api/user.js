@@ -9,5 +9,5 @@ export const me = () => {
 };
 
 export const create = user => {
-  return post('/users');
+  return post('/users', user);
 };
