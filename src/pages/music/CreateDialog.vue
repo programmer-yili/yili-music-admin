@@ -4,7 +4,10 @@
       <q-card-section>
         <div class="text-h6">添加音乐</div>
       </q-card-section>
-      <q-form @submit="createMusic()" class="q-gutter-md">
+      <q-form
+        @submit="isEdit ? editMusic() : createMusic()"
+        class="q-gutter-md"
+      >
         <q-card-section>
           <q-input
             dense
@@ -23,6 +26,9 @@
             @keyup.enter="show = false"
           />
         </q-card-section>
+        <q-card-section>
+          <uploader label="上传音乐" v-model:file="music.file" />
+        </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
           <q-btn label="确认" type="submit" color="primary" />
@@ -35,12 +41,26 @@
 
 <script setup>
 import { reactive, ref } from 'vue';
-import { create } from '../../api/music.js';
+import { create, update } from '../../api/music.js';
 import notify from '../../utils/notify.js';
+import Uploader from '../../components/Uploader.vue';
+
+const props = defineProps({
+  data: {
+    type: Object,
+    default() {
+      return null;
+    }
+  }
+});
 
 const show = ref(true);
 
-const music = reactive({ name: '', description: '' });
+const file = ref(null);
+
+const isEdit = ref(Boolean(props.data));
+
+const music = reactive(props.data || { name: '', description: '', file: null });
 
 const emmit = defineEmits(['create-success']);
 
@@ -49,6 +69,14 @@ const createMusic = () => {
     show.value = false;
     notify.success(`音乐《${createdMusic.name}》创建成功！`);
     emmit('create-success');
+  });
+};
+
+const editMusic = () => {
+  update(music.id, music).then(updatedMusic => {
+    show.value = false;
+    notify.success(`音乐《${updatedMusic.name}》更新成功！`);
+    emmit('edit-success');
   });
 };
 </script>
