@@ -20,6 +20,12 @@ export const menuRoutes = [
     name: 'Music',
     meta: { title: '歌曲管理', icon: 'music_note' },
     component: () => import('../pages/music/Index.vue')
+  },
+  {
+    path: 'artist',
+    name: 'Artist',
+    meta: { title: '歌手管理', icon: 'mic' },
+    component: () => import('../pages/artist/Index.vue')
   }
 ];
 const routes = [
