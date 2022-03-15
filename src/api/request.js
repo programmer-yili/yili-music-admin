@@ -34,6 +34,9 @@ instance.interceptors.response.use(
     return response.data;
   },
   error => {
+    if (!error.response) {
+      notify.error('请求不成功，请联系后台管理员');
+    }
     handleErrorResponse(error.response);
     return Promise.reject(error);
   }

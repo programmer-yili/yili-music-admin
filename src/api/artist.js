@@ -4,6 +4,10 @@ export const list = () => {
   return get('/artists');
 };
 
+export const search = artistSearchFilter => {
+  return post('/artists/search', artistSearchFilter);
+};
+
 export const create = artist => {
   return post('/artists/', artist);
 };
