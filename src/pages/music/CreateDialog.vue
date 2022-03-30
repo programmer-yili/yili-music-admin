@@ -47,7 +47,7 @@
 
 <script setup>
 import { reactive, ref } from 'vue';
-import { create, update } from '../../api/music.js';
+import musicApi from '../../api/music.js';
 import notify from '../../utils/notify.js';
 import Uploader from '../../components/Uploader.vue';
 import ArtistSelection from '../../components/ArtistSelection.vue';
@@ -80,7 +80,7 @@ const createMusic = () => {
     artistIds:
       music.artistList.length === 0 ? [] : music.artistList.map(item => item.id)
   };
-  create(createMusicRequest).then(createdMusic => {
+  musicApi.create(createMusicRequest).then(createdMusic => {
     show.value = false;
     notify.success(`音乐《${createdMusic.name}》创建成功！`);
     emmit('create-success');
@@ -94,7 +94,7 @@ const editMusic = () => {
     artistIds:
       music.artistList.length === 0 ? [] : music.artistList.map(item => item.id)
   };
-  update(music.id, updateMusicRequest).then(updatedMusic => {
+  musicApi.update(music.id, updateMusicRequest).then(updatedMusic => {
     show.value = false;
     notify.success(`音乐《${updatedMusic.name}》更新成功！`);
     emmit('edit-success');

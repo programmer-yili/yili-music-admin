@@ -41,7 +41,7 @@
 
 <script setup>
 import { reactive, ref } from 'vue';
-import { create, update } from '../../api/artist.js';
+import artistApi from '../../api/artist.js';
 import notify from '../../utils/notify.js';
 import Uploader from '../../components/Uploader.vue';
 
@@ -63,27 +63,31 @@ const artist = reactive(props.data || { name: '', remark: '', photo: null });
 const emmit = defineEmits(['create-success', 'edit-success']);
 
 const createArtist = () => {
-  create({
-    name: artist.name,
-    remark: artist.remark,
-    photoId: artist.photo.id
-  }).then(createdArtist => {
-    show.value = false;
-    notify.success(`歌手《${createdArtist.name}》创建成功！`);
-    emmit('create-success');
-  });
+  artistApi
+    .create({
+      name: artist.name,
+      remark: artist.remark,
+      photoId: artist.photo.id
+    })
+    .then(createdArtist => {
+      show.value = false;
+      notify.success(`歌手《${createdArtist.name}》创建成功！`);
+      emmit('create-success');
+    });
 };
 
 const editArtist = () => {
-  update(artist.id, {
-    name: artist.name,
-    remark: artist.remark,
-    photoId: artist.photo.id
-  }).then(updatedArtist => {
-    show.value = false;
-    notify.success(`歌手《${updatedArtist.name}》更新成功！`);
-    emmit('edit-success');
-  });
+  artistApi
+    .update(artist.id, {
+      name: artist.name,
+      remark: artist.remark,
+      photoId: artist.photo.id
+    })
+    .then(updatedArtist => {
+      show.value = false;
+      notify.success(`歌手《${updatedArtist.name}》更新成功！`);
+      emmit('edit-success');
+    });
 };
 </script>
 

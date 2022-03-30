@@ -1,13 +1,19 @@
 import { get, post } from './request';
 
-export const search = paging => {
+const search = paging => {
   return get('/users/', { params: paging });
 };
 
-export const me = () => {
+const me = () => {
   return get('/users/me');
 };
 
-export const create = user => {
+const create = user => {
   return post('/users', user);
+};
+
+export default {
+  create,
+  me,
+  search
 };

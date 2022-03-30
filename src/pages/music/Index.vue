@@ -1,11 +1,7 @@
 <template>
   <div class="page">
     <div class="q-mt-md q-mb-md">
-      <q-btn
-        color="primary"
-        label="添加歌曲"
-        @click="createDialog.showDialog()"
-      />
+      <q-btn color="primary" label="添加歌曲" @click="showDialog()" />
     </div>
 
     <div
@@ -72,22 +68,23 @@
       </template>
     </q-table>
     <create-dialog
-      v-if="createDialogShow"
+      v-if="show"
       :data="editRow"
-      @hide="createDialog.hideDialog()"
+      @hide="hideDialog()"
       @create-success="fetchData"
     />
   </div>
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
-import { search, publish, close } from '../../api/music.js';
+import { ref } from 'vue';
+import musicApi from '../../api/music.js';
 import { useToggleDialog } from '../../composables/useToggleDialog.js';
 import CreateDialog from './CreateDialog.vue';
 
 import { musicStatus, musicStatusColor } from '../../utils/dict.js';
 import notify from '../../utils/notify.js';
+import { useSearch } from '../../composables/useSearch.js';
 
 const columns = [
   {
@@ -113,55 +110,26 @@ const columns = [
   }
 ];
 
-const data = ref([]);
-
-const createDialogShow = ref(false);
-
-const createDialog = useToggleDialog(createDialogShow);
+const { showDialog, hideDialog, show } = useToggleDialog();
 
 const editRow = ref(null);
-
 const edit = row => {
   editRow.value = row;
-  createDialog.showDialog();
+  showDialog();
 };
 
 const searchKeys = ref({ name: '' });
-
-const pagination = ref({
-  page: 1,
-  rowsPerPage: 10,
-  rowsNumber: 10
-});
-
-const fetchData = props => {
-  const { page, rowsPerPage } = props.pagination || pagination.value;
-  const filter = {
-    ...searchKeys.value,
-    page,
-    size: rowsPerPage
-  };
-  search(filter).then(musicList => {
-    data.value = musicList.content;
-    pagination.value = {
-      page: musicList.number + 1,
-      rowsPerPage: musicList.size,
-      rowsNumber: musicList.totalElements
-    };
-  });
-};
-
-onMounted(() => fetchData({ pagination: pagination.value }));
+const { data, pagination, fetchData } = useSearch(musicApi.search, searchKeys);
 
 const publishMusic = id => {
-  publish(id).then(() => {
+  musicApi.publish(id).then(() => {
     notify.success('音乐上架成功！');
     fetchData();
   });
 };
 
 const closeMusic = id => {
-  close(id).then(() => {
+  musicApi.close(id).then(() => {
     notify.success('音乐下架成功！');
     fetchData();
   });

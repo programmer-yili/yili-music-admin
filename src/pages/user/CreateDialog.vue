@@ -8,7 +8,7 @@
       <q-card-section class="q-pt-none">
         <q-input
           dense
-          v-model="username"
+          v-model="userModel.username"
           label="用户名"
           autofocus
           @keyup.enter="show = false"
@@ -18,7 +18,7 @@
       <q-card-section class="q-pt-none">
         <q-input
           dense
-          v-model="password"
+          v-model="userModel.password"
           label="密码"
           autofocus
           @keyup.enter="show = false"
@@ -34,24 +34,21 @@
 </template>
 
 <script setup>
+import userApi from '../../api/user.js';
 import { ref } from 'vue';
-import { create } from '../../api/user.js';
-import { Notify } from 'quasar';
+import notify from '../../utils/notify.js';
 
 const show = ref(true);
 
-const username = ref('');
-const password = ref('');
-
+const userModel = ref({
+  username: '',
+  password: ''
+});
 const emmit = defineEmits(['create-success']);
 const createUser = () => {
-  create({ username: username.value, password: password.value }).then(res => {
+  userApi.create(userModel.value).then(res => {
     show.value = false;
-    Notify.create({
-      type: 'positive',
-      message: '用户创建成功！',
-      position: 'top'
-    });
+    notify.success('用户创建成功');
     emmit('create-success');
   });
 };

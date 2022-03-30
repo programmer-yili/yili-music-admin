@@ -9,6 +9,7 @@ export const useToggleDialog = show => {
 
   return {
     showDialog,
-    hideDialog
+    hideDialog,
+    show
   };
 };

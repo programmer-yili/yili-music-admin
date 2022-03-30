@@ -1,17 +1,29 @@
 import { get, post } from './request.js';
 
-export const list = () => {
-  return get('/artists');
+const search = artistSearchFilter => {
+  return get('/artists', { params: artistSearchFilter });
 };
 
-export const search = artistSearchFilter => {
-  return post('/artists/search', artistSearchFilter);
+const create = artist => {
+  return post('/artists', artist);
 };
 
-export const create = artist => {
-  return post('/artists/', artist);
-};
-
-export const update = (id, fields) => {
+const update = (id, fields) => {
   return post(`/artists/${id}`, fields);
+};
+
+const recommend = (id, recommendFactor) => {
+  return post(`/artists/${id}/recommend`, { recommendFactor });
+};
+
+const cancelRecommendation = id => {
+  return post(`/artists/${id}/cancel_recommendation`);
+};
+
+export default {
+  search,
+  create,
+  update,
+  recommend,
+  cancelRecommendation
 };

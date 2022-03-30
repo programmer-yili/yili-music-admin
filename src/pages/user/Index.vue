@@ -15,9 +15,10 @@
 </template>
 
 <script setup>
-import { useUserSearch } from '../../composables/useUserSearch.js';
 import { useToggleDialog } from '../../composables/useToggleDialog.js';
 import CreateDialog from './CreateDialog.vue';
+import userApi from '../../api/user.js';
+import { useSearch } from '../../composables/useSearch.js';
 import { ref } from 'vue';
 
 const columns = [
@@ -35,16 +36,10 @@ const columns = [
   }
 ];
 
-const show = ref(false);
+const { showDialog, hideDialog, show } = useToggleDialog();
 
-const { showDialog, hideDialog } = useToggleDialog(show);
-
-const pagination = ref({
-  page: 1,
-  rowsPerPage: 10
-});
-
-const { data, fetchData } = useUserSearch(pagination);
+const searchKeys = ref({});
+const { data, fetchData, pagination } = useSearch(userApi.search, searchKeys);
 </script>
 
 <style scoped></style>
