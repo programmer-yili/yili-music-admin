@@ -1,4 +1,7 @@
-export const useToggleDialog = show => {
+import { ref } from 'vue';
+
+export const useToggleDialog = () => {
+  const show = ref(false);
   const hideDialog = () => {
     show.value = false;
   };

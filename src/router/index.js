@@ -26,6 +26,12 @@ export const menuRoutes = [
     name: 'Artist',
     meta: { title: '歌手管理', icon: 'mic' },
     component: () => import('../pages/artist/Index.vue')
+  },
+  {
+    path: 'playlist.js',
+    name: 'Playlist',
+    meta: { title: '歌单管理', icon: 'queue_music' },
+    component: () => import('../pages/playlist/Index.vue')
   }
 ];
 const routes = [
