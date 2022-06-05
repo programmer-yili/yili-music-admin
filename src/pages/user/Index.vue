@@ -3,6 +3,18 @@
     <div class="q-mt-md q-mb-md">
       <q-btn color="primary" label="添加用户" @click="showDialog" />
     </div>
+
+    <div
+      class="fit row no-wrap justify-start items-center content-start q-mb-md"
+    >
+      <q-input
+        dense
+        v-model="searchKeys.nickname"
+        placeholder="用户名"
+        class="q-mr-md"
+      />
+      <q-btn color="primary" label="检索" @click="fetchData" />
+    </div>
     <q-table
       :rows="data"
       :columns="columns"
@@ -38,7 +50,7 @@ const columns = [
 
 const { showDialog, hideDialog, show } = useToggleDialog();
 
-const searchKeys = ref({});
+const searchKeys = ref({ nickname: '' });
 const { data, fetchData, pagination } = useSearch(userApi.search, searchKeys);
 </script>
 
